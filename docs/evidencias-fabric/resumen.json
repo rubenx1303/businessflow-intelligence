@@ -1,0 +1,68 @@
+{
+  "nota": "Resultados REALES obtenidos el 23/11/2026 al ejecutar el circuito en Microsoft Fabric. Este archivo es un registro estático: la aplicación no consulta Azure. No se ha vuelto a ejecutar nada en Fabric después de pausar la capacidad.",
+  "fecha": "2026-11-23",
+  "capacidad": {
+    "nombre": "bfifabricdev", "sku": "F2", "region": "Spain Central", "suscripcion": "Azure for Students",
+    "estado": "En pausa", "estado_verificado": "2026-11-23 (portal de Azure)", "encendida": "18:21 a 18:58 aprox. (hora local)"
+  },
+  "recursos": [
+    { "tipo": "Área de trabajo", "nombre": "BusinessFlow Intelligence - DEV" },
+    { "tipo": "Lakehouse", "nombre": "lh_businessflow", "detalle": "Esquemas habilitados: Files/bronze, Tables/silver, Tables/gold" },
+    { "tipo": "Notebook PySpark", "nombre": "01_bronze_a_silver", "detalle": "Ejecutado por API en 172 s" },
+    { "tipo": "Notebook PySpark", "nombre": "02_silver_a_gold", "detalle": "Ejecutado por API en 532 s (capacidad compartida)" },
+    { "tipo": "Warehouse", "nombre": "wh_businessflow", "detalle": "4 vistas T-SQL y 1 procedimiento almacenado en el esquema analitica" },
+    { "tipo": "Modelo semántico", "nombre": "BusinessFlow Compras e Inventario", "detalle": "Direct Lake · 7 tablas · 12 relaciones · 30 medidas DAX" }
+  ],
+  "bronze": { "archivos_subidos": 18, "bytes": 290714, "destino": "OneLake · lh_businessflow/Files/bronze" },
+  "silver": {
+    "id_ejecucion": "0ce27be73a7b", "segundos": 172,
+    "totales": { "filas_leidas": 47820, "duplicadas_eliminadas": 6359, "rechazadas": 0, "escritas": 41461 },
+    "tablas": [
+      { "tabla": "almacenes", "cargas_leidas": 2, "filas_leidas": 6, "duplicadas_eliminadas": 3, "rechazadas": 0, "escritas": 3 },
+      { "tabla": "proveedores", "cargas_leidas": 2, "filas_leidas": 18, "duplicadas_eliminadas": 9, "rechazadas": 0, "escritas": 9 },
+      { "tabla": "productos", "cargas_leidas": 2, "filas_leidas": 80, "duplicadas_eliminadas": 40, "rechazadas": 0, "escritas": 40 },
+      { "tabla": "pedidos_compra", "cargas_leidas": 2, "filas_leidas": 1910, "duplicadas_eliminadas": 955, "rechazadas": 0, "escritas": 955 },
+      { "tabla": "lineas_pedido", "cargas_leidas": 2, "filas_leidas": 4050, "duplicadas_eliminadas": 2025, "rechazadas": 0, "escritas": 2025 },
+      { "tabla": "recepciones", "cargas_leidas": 2, "filas_leidas": 2158, "duplicadas_eliminadas": 1079, "rechazadas": 0, "escritas": 1079 },
+      { "tabla": "lineas_recepcion", "cargas_leidas": 2, "filas_leidas": 4496, "duplicadas_eliminadas": 2248, "rechazadas": 0, "escritas": 2248 },
+      { "tabla": "movimientos_stock", "cargas_leidas": 1, "filas_leidas": 35102, "duplicadas_eliminadas": 0, "rechazadas": 0, "escritas": 35102 }
+    ]
+  },
+  "gold": {
+    "segundos": 532,
+    "tablas": [
+      { "tabla": "dim_fecha", "filas": 730 }, { "tabla": "dim_producto", "filas": 40 }, { "tabla": "dim_proveedor", "filas": 9 },
+      { "tabla": "dim_almacen", "filas": 3 }, { "tabla": "fact_compras", "filas": 2025 }, { "tabla": "fact_recepciones", "filas": 2248 },
+      { "tabla": "fact_movimientos_inventario", "filas": 35102 }
+    ]
+  },
+  "warehouse": [
+    { "objeto": "analitica.vw_gasto_mensual", "tipo": "vista" },
+    { "objeto": "analitica.vw_rendimiento_proveedor", "tipo": "vista" },
+    { "objeto": "analitica.vw_puntualidad_trimestral", "tipo": "vista" },
+    { "objeto": "analitica.sp_cargar_inventario_diario", "tipo": "procedimiento", "detalle": "Genera analitica.inventario_diario (43.800 filas) en 6 s" },
+    { "objeto": "analitica.vw_stock_actual", "tipo": "vista" }
+  ],
+  "validacion_dax": [
+    { "medida": "Coste total de compras", "aplicacion": 1842763.8286, "fabric": 1842763.8286 },
+    { "medida": "Pedidos", "aplicacion": 955, "fabric": 955 },
+    { "medida": "% Entregas puntuales", "aplicacion": 0.7744, "fabric": 0.7744 },
+    { "medida": "Retraso medio (días)", "aplicacion": 0.9947, "fabric": 0.9947 },
+    { "medida": "Valor del inventario", "aplicacion": 55927.77, "fabric": 55927.77 },
+    { "medida": "Productos bajo mínimo", "aplicacion": 6, "fabric": 6 },
+    { "medida": "Consumo valorado", "aplicacion": 1899723.73, "fabric": 1899723.73 },
+    { "medida": "Rotación de inventario", "aplicacion": 33.9674, "fabric": 33.9674 }
+  ],
+  "incidencias": [
+    "La suscripción de estudiante bloquea West Europe: la capacidad se creó en Spain Central.",
+    "El asistente proponía una capacidad F64 por defecto; se cambió a F2 y se desactivó la protección de sobrecoste.",
+    "El punto de conexión SQL tardó en ver gold.dim_proveedor; se forzó el refresco de metadatos por API.",
+    "Al validar el modelo se corrigieron tres medidas DAX (ranking, variación mensual y desviación de plazo)."
+  ],
+  "no_demostrado_en_fabric": [
+    "Las reglas de rechazo de Silver no llegaron a rechazar ninguna fila en Fabric (el origen no tenía datos inválidos).",
+    "No se creó una canalización de Data Factory: la ingesta y la orquestación se hicieron con scripts.",
+    "No se construyó un informe de Power BI sobre el modelo semántico.",
+    "No se configuró seguridad a nivel de fila (RLS)."
+  ]
+}

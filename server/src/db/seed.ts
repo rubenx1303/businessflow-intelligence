@@ -24,7 +24,7 @@ function mulberry32(a: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-const rnd = mulberry32(20261123);
+let rnd = mulberry32(20261123);
 const gauss = () => Math.sqrt(-2 * Math.log(1 - rnd())) * Math.cos(2 * Math.PI * rnd());
 const r4 = (n: number) => Math.round(n * 10000) / 10000;
 
@@ -132,6 +132,7 @@ async function insertar(tabla: string, cols: Record<string, string>, filas: any[
 
 export async function sembrar() {
   if (!config.SEED_ADMIN_PASSWORD) throw new Error('Define SEED_ADMIN_PASSWORD en .env antes de ejecutar el seed');
+  rnd = mulberry32(20261123); // se reinicia en cada siembra: restaurar la demo da siempre los mismos datos
   await migrar();
   await pool.query(`TRUNCATE auditoria, movimientos_stock, lineas_recepcion, recepciones, lineas_pedido, pedidos_compra,
                     productos, almacenes, proveedores, usuarios, empresas RESTART IDENTITY CASCADE`);

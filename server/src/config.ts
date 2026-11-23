@@ -16,6 +16,8 @@ const esquema = z.object({
   JWT_SECRET: z.string().min(32, 'JWT_SECRET debe tener al menos 32 caracteres'),
   JWT_EXPIRES_IN: z.string().default('8h'),
   CORS_ORIGIN: z.string().default('http://localhost:5180'),
+  // Modo demostración: acceso con un clic por rol y botón para restaurar los datos ficticios. Nunca en un entorno con datos reales.
+  DEMO_MODE: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
   SEED_ADMIN_EMAIL: z.string().email().default('admin@demo.local'),
   SEED_ADMIN_PASSWORD: z.string().min(8).optional(),
 });

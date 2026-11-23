@@ -1,4 +1,6 @@
-import { Boxes, ChevronsLeft, ChevronsRight, ClipboardList, LayoutDashboard, LineChart, LogOut, Menu, Moon, ScrollText, Sun, Truck, X } from 'lucide-react';
+import { Boxes, ChevronsLeft, ChevronsRight, ClipboardList, Database, FileBarChart, LayoutDashboard, LineChart, LogOut, Menu, Moon, ScrollText, Sun, Truck, X } from 'lucide-react';
+import { LimiteErrores } from './LimiteErrores';
+import { RestaurarDemo } from './Operaciones';
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { puede } from '../lib/api';
@@ -12,6 +14,8 @@ const NAV = [
   { a: '/inventario', etiqueta: 'Inventario', icono: Boxes },
   { a: '/compras', etiqueta: 'Compras', icono: ClipboardList },
   { a: '/inteligencia', etiqueta: 'Inteligencia', icono: LineChart },
+  { a: '/informes', etiqueta: 'Informes', icono: FileBarChart },
+  { a: '/datos', etiqueta: 'Datos', icono: Database },
   { a: '/auditoria', etiqueta: 'Auditoría', icono: ScrollText, permiso: 'auditoria' },
 ];
 
@@ -25,7 +29,7 @@ function Marca({ compacta }: { compacta?: boolean }) {
 }
 
 export function Layout() {
-  const { usuario, salir } = useSesion();
+  const { usuario, salir, demo } = useSesion();
   const { oscuro, alternar } = useTema();
   const [plegada, setPlegada] = useState(() => { try { return localStorage.getItem('bfi-nav') === 'plegada'; } catch { return false; } });
   const [cajon, setCajon] = useState(false);
@@ -54,7 +58,8 @@ export function Layout() {
       <aside className={cx('sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-linea bg-panel transition-[width] duration-200 lg:flex', plegada ? 'w-[60px]' : 'w-[216px]')}>
         <div className={cx('flex h-14 items-center border-b border-linea', plegada ? 'justify-center' : 'px-3.5')}><Marca compacta={plegada} /></div>
         {enlaces(plegada)}
-        <div className="border-t border-linea p-2">
+        <div className="space-y-0.5 border-t border-linea p-2">
+          <RestaurarDemo compacto plegado={plegada} />
           <Boton variante="fantasma" className={cx('w-full', !plegada && 'justify-start')} onClick={() => setPlegada((p) => !p)} aria-expanded={!plegada}
             aria-label={plegada ? 'Desplegar navegación' : 'Plegar navegación'}>
             {plegada ? <ChevronsRight size={17} /> : <><ChevronsLeft size={17} />Plegar</>}
@@ -72,6 +77,7 @@ export function Layout() {
               <Boton variante="fantasma" pequeno onClick={() => setCajon(false)} aria-label="Cerrar menú"><X size={18} /></Boton>
             </div>
             {enlaces(false)}
+            <div className="border-t border-linea p-2"><RestaurarDemo compacto /></div>
           </aside>
         </div>
       )}
@@ -79,8 +85,9 @@ export function Layout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-linea bg-panel/90 px-3 backdrop-blur sm:px-5">
           <Boton variante="fantasma" className="lg:hidden" onClick={() => setCajon(true)} aria-label="Abrir menú"><Menu size={19} /></Boton>
-          <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <p className="truncate font-medium">{usuario?.empresa ?? 'BusinessFlow Intelligence'}</p>
+            {demo && <span className="shrink-0 rounded-sm bg-ambar-suave px-1.5 py-px text-xs font-medium whitespace-nowrap text-ambar" title="Demostración local: la empresa y todas sus operaciones son ficticias">Demo<span className="hidden md:inline">, datos ficticios</span></span>}
           </div>
           <div className="hidden min-w-0 text-right leading-tight sm:block">
             <p className="truncate text-[13px] font-medium">{usuario?.nombre}</p>
@@ -92,7 +99,7 @@ export function Layout() {
           <Boton variante="fantasma" onClick={salir} aria-label="Cerrar sesión" title="Cerrar sesión"><LogOut size={18} /></Boton>
         </header>
         <main id="contenido" className="mx-auto w-full max-w-[1480px] flex-1 px-3 py-5 sm:px-6 sm:py-6">
-          <Outlet />
+          <LimiteErrores clave={pathname}><Outlet /></LimiteErrores>
         </main>
       </div>
     </div>

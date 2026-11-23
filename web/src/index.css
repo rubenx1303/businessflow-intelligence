@@ -87,6 +87,8 @@ table { font-variant-numeric: tabular-nums; }
 @keyframes entra-modal { from { transform: translateY(8px) scale(0.985); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pulso { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes barrido { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+.barra-indeterminada { animation: barrido 1.4s ease-in-out infinite; }
 .anim-panel { animation: entra-panel 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .anim-modal { animation: entra-modal 0.18s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .anim-fondo { animation: aparece 0.15s ease-out; }

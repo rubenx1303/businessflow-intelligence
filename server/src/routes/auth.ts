@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Router } from 'express';
 import { z } from 'zod';
+import { config } from '../config.js';
 import { q } from '../db/pool.js';
 import { ErrorHttp, autenticar, firmarToken, type Sesion } from '../http.js';
 
@@ -25,6 +26,19 @@ auth.post('/login', async (req, res) => {
     throw new ErrorHttp(401, 'Credenciales incorrectas', 'CREDENCIALES');
   }
   intentos.delete(clave);
+  const s: Sesion = { id: u.id, empresaId: u.empresa_id, rol: u.rol, email: u.email };
+  res.json({ token: firmarToken(s), usuario: { id: u.id, email: u.email, nombre: u.nombre, rol: u.rol } });
+});
+
+/** La pantalla de acceso pregunta si la instancia es una demo para ofrecer la entrada con un clic. */
+auth.get('/modo', (_req, res) => res.json({ demo: config.DEMO_MODE }));
+
+/** Acceso de demostración por rol, sin contraseña. Solo responde si DEMO_MODE=true (datos ficticios, uso local). */
+auth.post('/demo', async (req, res) => {
+  if (!config.DEMO_MODE) throw new ErrorHttp(404, 'Ruta no encontrada', 'NO_ENCONTRADO');
+  const { rol } = z.object({ rol: z.enum(['admin', 'compras', 'almacen', 'lectura']) }).parse(req.body);
+  const [u] = await q('SELECT id, empresa_id, email, nombre, rol FROM usuarios WHERE rol = $1 AND activo ORDER BY id LIMIT 1', [rol]);
+  if (!u) throw new ErrorHttp(409, 'No hay datos de demostración: ejecuta la siembra', 'SIN_DATOS');
   const s: Sesion = { id: u.id, empresaId: u.empresa_id, rol: u.rol, email: u.email };
   res.json({ token: firmarToken(s), usuario: { id: u.id, email: u.email, nombre: u.nombre, rol: u.rol } });
 });

@@ -1,4 +1,5 @@
-const nf = (o: Intl.NumberFormatOptions) => new Intl.NumberFormat('es-ES', o);
+// useGrouping 'always': en es-ES los números de cuatro cifras no llevan separador por defecto (4839), y en tablas despista.
+const nf = (o: Intl.NumberFormatOptions) => new Intl.NumberFormat('es-ES', { useGrouping: 'always', ...o } as Intl.NumberFormatOptions);
 const fEur = nf({ style: 'currency', currency: 'EUR', maximumFractionDigits: 2 });
 const fEur0 = nf({ style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 const fEurK = nf({ style: 'currency', currency: 'EUR', notation: 'compact', maximumFractionDigits: 1 });

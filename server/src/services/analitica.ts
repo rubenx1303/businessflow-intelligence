@@ -1,15 +1,7 @@
 import { q } from '../db/pool.js';
 import { calcularReposicion, puntuarProveedor, PARAMETROS_POR_DEFECTO } from './reposicion.js';
 
-export interface Filtros { desde?: string; hasta?: string; almacen_id?: number; categoria?: string }
-
-/** Periodo por defecto: últimos 12 meses hasta hoy. */
-async function periodo(f: Filtros): Promise<{ desde: string; hasta: string; dias: number }> {
-  const [r] = await q(
-    `SELECT COALESCE($1::date, CURRENT_DATE - 364)::text AS desde, COALESCE($2::date, CURRENT_DATE)::text AS hasta,
-            (COALESCE($2::date, CURRENT_DATE) - COALESCE($1::date, CURRENT_DATE - 364) + 1) AS dias`, [f.desde ?? null, f.hasta ?? null]);
-  return r;
-}
+export interface Filtros { desde?: string; hasta?: string; almacen_id?: number; categoria?: string; proveedor_id?: number; producto_id?: number }
 
 export async function rendimientoProveedores(empresaId: number, f: Filtros) {
   const filas = await q(
@@ -39,87 +31,6 @@ export async function rendimientoProveedores(empresaId: number, f: Filtros) {
     ...m,
     puntuacion: puntuarProveedor({ otd: m.otd, tasaRechazo: m.tasa_rechazo, retrasoMedio: m.retraso_medio }),
   }));
-}
-
-export async function dashboard(empresaId: number, f: Filtros) {
-  const p = await periodo(f);
-  const base = [empresaId, p.desde, p.hasta, f.almacen_id ?? null, f.categoria ?? null];
-
-  const [compras] = await q(
-    `SELECT COALESCE(sum(lp.cantidad * lp.precio_unitario), 0) AS gasto, count(DISTINCT pc.id)::int AS pedidos
-       FROM pedidos_compra pc JOIN lineas_pedido lp ON lp.pedido_id = pc.id JOIN productos pd ON pd.id = lp.producto_id
-      WHERE pc.empresa_id = $1 AND pc.estado NOT IN ('borrador','cancelado') AND pc.fecha_pedido BETWEEN $2 AND $3
-        AND ($4::int IS NULL OR pc.almacen_id = $4) AND ($5::text IS NULL OR pd.categoria = $5)`, base);
-
-  const [inv] = await q(
-    `SELECT COALESCE(sum(e.stock * pd.coste_estandar), 0) AS valor
-       FROM v_existencias e JOIN productos pd ON pd.id = e.producto_id
-      WHERE e.empresa_id = $1 AND ($2::int IS NULL OR e.almacen_id = $2) AND ($3::text IS NULL OR pd.categoria = $3)`,
-    [empresaId, f.almacen_id ?? null, f.categoria ?? null]);
-
-  // Bajo mínimo: se compara el stock total de la empresa con el mínimo del producto (el mínimo es global, no por almacén).
-  const bajoMinimo = await q(
-    `SELECT pd.id, pd.sku, pd.nombre, pd.categoria, pd.unidad, pd.stock_minimo, COALESCE(s.stock, 0) AS stock
-       FROM productos pd LEFT JOIN (SELECT producto_id, sum(stock) AS stock FROM v_existencias WHERE empresa_id = $1 GROUP BY 1) s ON s.producto_id = pd.id
-      WHERE pd.empresa_id = $1 AND pd.activo AND COALESCE(s.stock, 0) < pd.stock_minimo AND ($2::text IS NULL OR pd.categoria = $2)
-      ORDER BY COALESCE(s.stock, 0) / NULLIF(pd.stock_minimo, 0)`, [empresaId, f.categoria ?? null]);
-
-  const [entregas] = await q(
-    `SELECT avg((u.ultima <= pc.fecha_entrega_prevista)::int) AS otd, avg(GREATEST(u.ultima - pc.fecha_entrega_prevista, 0)) AS retraso_medio,
-            count(*)::int AS completados
-       FROM pedidos_compra pc JOIN LATERAL (SELECT max(r.fecha_recepcion) AS ultima FROM recepciones r WHERE r.pedido_id = pc.id) u ON true
-      WHERE pc.empresa_id = $1 AND pc.estado = 'recibido' AND pc.fecha_pedido BETWEEN $2 AND $3 AND ($4::int IS NULL OR pc.almacen_id = $4)`,
-    base.slice(0, 4));
-
-  const [abiertos] = await q(
-    `SELECT count(*)::int AS abiertos, count(*) FILTER (WHERE fecha_entrega_prevista < CURRENT_DATE)::int AS retrasados
-       FROM pedidos_compra WHERE empresa_id = $1 AND estado IN ('enviado','parcial') AND ($2::int IS NULL OR almacen_id = $2)`,
-    [empresaId, f.almacen_id ?? null]);
-
-  const consumoCategoria = await q(
-    `SELECT pd.categoria, sum(-m.cantidad * m.coste_unitario) AS valor, sum(-m.cantidad) AS unidades
-       FROM movimientos_stock m JOIN productos pd ON pd.id = m.producto_id
-      WHERE m.empresa_id = $1 AND m.tipo = 'SALIDA_CONSUMO' AND m.fecha >= $2::date AND m.fecha < $3::date + 1
-        AND ($4::int IS NULL OR m.almacen_id = $4) AND ($5::text IS NULL OR pd.categoria = $5)
-      GROUP BY pd.categoria ORDER BY valor DESC`, base);
-  const consumo = consumoCategoria.reduce((s, c) => s + c.valor, 0);
-
-  const gastoMensual = await q(
-    `SELECT to_char(date_trunc('month', pc.fecha_pedido), 'YYYY-MM') AS mes, sum(lp.cantidad * lp.precio_unitario) AS gasto, count(DISTINCT pc.id)::int AS pedidos
-       FROM pedidos_compra pc JOIN lineas_pedido lp ON lp.pedido_id = pc.id JOIN productos pd ON pd.id = lp.producto_id
-      WHERE pc.empresa_id = $1 AND pc.estado NOT IN ('borrador','cancelado') AND pc.fecha_pedido BETWEEN $2 AND $3
-        AND ($4::int IS NULL OR pc.almacen_id = $4) AND ($5::text IS NULL OR pd.categoria = $5)
-      GROUP BY 1 ORDER BY 1`, base);
-
-  const retrasados = await q(
-    `SELECT pc.id, pc.numero, pr.nombre AS proveedor, pc.fecha_entrega_prevista, (CURRENT_DATE - pc.fecha_entrega_prevista) AS dias_retraso
-       FROM pedidos_compra pc JOIN proveedores pr ON pr.id = pc.proveedor_id
-      WHERE pc.empresa_id = $1 AND pc.estado IN ('enviado','parcial') AND pc.fecha_entrega_prevista < CURRENT_DATE
-        AND ($2::int IS NULL OR pc.almacen_id = $2)
-      ORDER BY dias_retraso DESC LIMIT 8`, [empresaId, f.almacen_id ?? null]);
-
-  const proveedores = (await rendimientoProveedores(empresaId, { ...f, desde: p.desde, hasta: p.hasta })).filter((x) => x.pedidos > 0);
-
-  return {
-    periodo: p,
-    kpis: {
-      gasto_compras: compras.gasto,
-      pedidos: compras.pedidos,
-      valor_inventario: inv.valor,
-      productos_bajo_minimo: bajoMinimo.length,
-      entregas_puntuales: entregas.otd,
-      retraso_medio_dias: entregas.retraso_medio,
-      consumo_valorado: consumo,
-      // Rotación anualizada = coste del consumo del periodo llevado a 365 días / valor actual del inventario.
-      rotacion_inventario: inv.valor > 0 ? (consumo * 365 / p.dias) / inv.valor : null,
-      pedidos_abiertos: abiertos.abiertos,
-      pedidos_retrasados: abiertos.retrasados,
-    },
-    gasto_mensual: gastoMensual,
-    consumo_categoria: consumoCategoria,
-    top_proveedores: proveedores.slice(0, 6),
-    alertas: { bajo_minimo: bajoMinimo.slice(0, 8), pedidos_retrasados: retrasados },
-  };
 }
 
 export async function reposicion(empresaId: number, params = PARAMETROS_POR_DEFECTO) {

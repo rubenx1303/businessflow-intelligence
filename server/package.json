@@ -10,7 +10,9 @@
     "migrate": "tsx src/db/migrate.ts",
     "seed": "tsx src/db/seed.ts",
     "export:bronze": "tsx src/data/exportBronze.ts",
-    "test": "vitest run"
+    "pipeline": "tsx src/data/medallion.ts",
+    "test": "vitest run",
+    "preparar:demo": "tsx src/db/prepararDemo.ts"
   },
   "dependencies": {
     "@duckdb/node-api": "^2.0.1-r.1",

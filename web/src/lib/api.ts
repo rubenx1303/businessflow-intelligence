@@ -45,7 +45,10 @@ export interface Dashboard {
   kpis: {
     gasto_compras: number; pedidos: number; valor_inventario: number; productos_bajo_minimo: number; entregas_puntuales: number | null;
     retraso_medio_dias: number | null; consumo_valorado: number; rotacion_inventario: number | null; pedidos_abiertos: number; pedidos_retrasados: number;
+    pedidos_completados: number; pedidos_con_retraso: number;
   };
+  consumo_mensual: { mes: string; valor: number }[];
+  distribucion_retraso: { tramo: string; pedidos: number }[];
   gasto_mensual: { mes: string; gasto: number; pedidos: number }[];
   consumo_categoria: { categoria: string; valor: number; unidades: number }[];
   top_proveedores: MetricasProveedor[];
@@ -71,6 +74,65 @@ export interface Historial {
   metricas: MetricasProveedor | null;
   pedidos: { id: number; numero: string; estado: EstadoPedido; fecha_pedido: string; fecha_entrega_prevista: string; ultima_recepcion: string | null; importe: number }[];
   cambios: { fecha: string; accion: string; detalle: Record<string, { antes: unknown; despues: unknown }> | Record<string, unknown> | null; usuario: string | null }[];
+}
+
+// ---------- Informes sobre Gold ----------
+export interface KpisInforme {
+  gasto_compras: number; pedidos: number; pedidos_completados: number; entregas_puntuales: number | null; retraso_medio_dias: number | null;
+  plazo_real_medio_dias: number | null; valor_inventario: number; productos_bajo_minimo: number; consumo_valorado: number; consumo_unidades: number;
+  tasa_rechazo: number | null; rotacion_inventario: number | null;
+}
+export interface LineaCuadre { campo: string; medida_dax: string; operativo: number | null; gold: number | null; coincide: boolean }
+export interface Informes {
+  disponible: true;
+  periodo: { desde: string; hasta: string; dias: number };
+  ejecucion: { id_ejecucion?: string; fin?: string; motor?: string };
+  kpis: KpisInforme;
+  gasto_mensual: { anio_mes: string; gasto: number; pedidos: number; variacion: number | null; acumulado_anio: number; media_movil_3m: number }[];
+  proveedores: {
+    proveedor_id: number; codigo: string; nombre: string; estado: string; plazo_acordado_dias: number; pedidos: number; completados: number; gasto: number;
+    cuota_gasto: number; ranking_gasto: number; entregas_puntuales: number | null; retraso_medio_dias: number | null; plazo_real_dias: number | null;
+    desviacion_plazo_dias: number | null; tasa_rechazo: number | null;
+  }[];
+  puntualidad_trimestral: { codigo: string; nombre: string; periodo: string; pedidos: number; entregas_puntuales: number; retraso_medio_dias: number; variacion: number | null }[];
+  consumo_categoria: { categoria: string; consumo_valorado: number; unidades: number; cuota: number | null; valor_inventario: number; bajo_minimo: number; rotacion: number | null }[];
+  inventario_mensual: { anio_mes: string; valor_cierre: number; valor_medio: number; max_roturas_dia: number }[];
+  cuadre: { al_dia: boolean; lineas: LineaCuadre[] };
+}
+export type RespuestaInformes = Informes | { disponible: false };
+
+// ---------- Circuito de datos ----------
+export interface Ejecucion {
+  id_ejecucion: string; motor: string; inicio: string; fin: string; estado: string;
+  duracion_ms: { bronze: number; silver: number; gold: number; total: number };
+  bronze: { id_carga: string; total_filas: number; tablas: { tabla: string; modo: string; filas: number; marca_agua: unknown }[] };
+  silver: {
+    tablas: { tabla: string; cargas_leidas: number; filas_leidas: number; duplicadas_eliminadas: number; rechazadas: number; escritas: number; ms?: number }[];
+    rechazos: unknown;
+    totales: { filas_leidas: number; duplicadas_eliminadas: number; rechazadas: number; escritas: number };
+  };
+  gold: { tablas: { tabla: string; grano: string; filas: number }[]; controles: Record<string, number> };
+}
+export interface EvidenciasFabric {
+  nota: string; fecha: string;
+  capacidad: { nombre: string; sku: string; region: string; suscripcion: string; estado: string; estado_verificado: string; encendida: string };
+  recursos: { tipo: string; nombre: string; detalle?: string }[];
+  bronze: { archivos_subidos: number; bytes: number; destino: string };
+  silver: { id_ejecucion: string; segundos: number; totales: Ejecucion['silver']['totales']; tablas: Ejecucion['silver']['tablas'] };
+  gold: { segundos: number; tablas: { tabla: string; filas: number }[] };
+  warehouse: { objeto: string; tipo: string; detalle?: string }[];
+  validacion_dax: { medida: string; aplicacion: number; fabric: number }[];
+  incidencias: string[];
+  no_demostrado_en_fabric: string[];
+}
+export interface EstadoDatos {
+  en_curso: string | null;
+  capas: Record<'bronze' | 'silver' | 'gold', { archivos: number; bytes: number }>;
+  ultima: Ejecucion | null;
+  historial: { id_ejecucion: string; fin: string; duracion_ms: number | null; filas_bronze: number | null; duplicadas: number | null; rechazadas: number | null; escritas_silver: number | null }[];
+  reglas_silver: { tabla: string; reglas: string[]; referencias: string[] }[];
+  modelo_gold: { tabla: string; grano: string }[];
+  fabric: EvidenciasFabric | null;
 }
 
 export class ErrorApi extends Error {
@@ -147,6 +209,6 @@ export function useRetardo<T>(valor: T, ms = 300): T {
 
 const PERMISOS: Record<string, Rol[]> = {
   proveedores: ['compras'], productos: ['compras'], pedidos: ['compras'], recepciones: ['compras', 'almacen'],
-  movimientos: ['almacen'], almacenes: [], auditoria: [],
+  movimientos: ['almacen'], almacenes: [], auditoria: [], pipeline: ['compras', 'almacen'], restaurar: [],
 };
 export const puede = (rol: Rol | undefined, accion: keyof typeof PERMISOS | string) => !!rol && (rol === 'admin' || (PERMISOS[accion] ?? []).includes(rol));

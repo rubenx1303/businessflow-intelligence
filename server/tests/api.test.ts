@@ -16,6 +16,9 @@ let proveedorId: number, almacenId: number, prodA: number, prodB: number;
 beforeAll(async () => {
   expect((await q('SELECT current_database() AS db'))[0].db).toBe('businessflow_test'); // salvaguarda
   await migrar();
+  // Cada archivo de pruebas parte de una base vacía: no depende del orden en que se ejecuten.
+  await q(`TRUNCATE auditoria, movimientos_stock, lineas_recepcion, recepciones, lineas_pedido, pedidos_compra,
+           productos, almacenes, proveedores, usuarios, empresas RESTART IDENTITY CASCADE`);
   const hash = await bcrypt.hash(CLAVE, 4);
   await q(`INSERT INTO empresas (nombre, cif) VALUES ('Empresa Test', 'B00000001'), ('Otra Empresa', 'B00000002')`);
   for (const rol of ['admin', 'compras', 'almacen', 'lectura']) {

@@ -1,0 +1,1114 @@
+{
+  "compatibilityLevel": 1604,
+  "model": {
+    "culture": "es-ES",
+    "collation": "Latin1_General_100_BIN2_UTF8",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "discourageImplicitMeasures": true,
+    "tables": [
+      {
+        "name": "DimFecha",
+        "columns": [
+          {
+            "name": "fecha_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "fecha",
+            "dataType": "dateTime",
+            "sourceColumn": "fecha",
+            "summarizeBy": "none",
+            "formatString": "dd/mm/yyyy",
+            "isKey": true,
+            "isHidden": false
+          },
+          {
+            "name": "anio",
+            "dataType": "int64",
+            "sourceColumn": "anio",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "trimestre",
+            "dataType": "int64",
+            "sourceColumn": "trimestre",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "mes",
+            "dataType": "int64",
+            "sourceColumn": "mes",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nombre_mes",
+            "dataType": "string",
+            "sourceColumn": "nombre_mes",
+            "summarizeBy": "none",
+            "sortByColumn": "mes"
+          },
+          {
+            "name": "anio_mes",
+            "dataType": "string",
+            "sourceColumn": "anio_mes",
+            "summarizeBy": "none",
+            "sortByColumn": "anio_mes_orden"
+          },
+          {
+            "name": "anio_mes_orden",
+            "dataType": "int64",
+            "sourceColumn": "anio_mes_orden",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "semana_iso",
+            "dataType": "int64",
+            "sourceColumn": "semana_iso",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "dia_semana",
+            "dataType": "int64",
+            "sourceColumn": "dia_semana",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nombre_dia",
+            "dataType": "string",
+            "sourceColumn": "nombre_dia",
+            "summarizeBy": "none",
+            "sortByColumn": "dia_semana"
+          },
+          {
+            "name": "es_fin_de_semana",
+            "dataType": "boolean",
+            "sourceColumn": "es_fin_de_semana",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimFecha",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "dim_fecha",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ],
+        "dataCategory": "Time"
+      },
+      {
+        "name": "DimProducto",
+        "columns": [
+          {
+            "name": "producto_key",
+            "dataType": "int64",
+            "sourceColumn": "producto_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "sku",
+            "dataType": "string",
+            "sourceColumn": "sku",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nombre",
+            "dataType": "string",
+            "sourceColumn": "nombre",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "categoria",
+            "dataType": "string",
+            "sourceColumn": "categoria",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "unidad",
+            "dataType": "string",
+            "sourceColumn": "unidad",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "coste_estandar",
+            "dataType": "decimal",
+            "sourceColumn": "coste_estandar",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "stock_minimo",
+            "dataType": "decimal",
+            "sourceColumn": "stock_minimo",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "lote_compra",
+            "dataType": "decimal",
+            "sourceColumn": "lote_compra",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "proveedor_preferente_key",
+            "dataType": "int64",
+            "sourceColumn": "proveedor_preferente_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "proveedor_preferente",
+            "dataType": "string",
+            "sourceColumn": "proveedor_preferente",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "activo",
+            "dataType": "boolean",
+            "sourceColumn": "activo",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimProducto",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "dim_producto",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DimProveedor",
+        "columns": [
+          {
+            "name": "proveedor_key",
+            "dataType": "int64",
+            "sourceColumn": "proveedor_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "codigo",
+            "dataType": "string",
+            "sourceColumn": "codigo",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nombre",
+            "dataType": "string",
+            "sourceColumn": "nombre",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cif",
+            "dataType": "string",
+            "sourceColumn": "cif",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ciudad",
+            "dataType": "string",
+            "sourceColumn": "ciudad",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "pais",
+            "dataType": "string",
+            "sourceColumn": "pais",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "estado",
+            "dataType": "string",
+            "sourceColumn": "estado",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "plazo_acordado_dias",
+            "dataType": "int64",
+            "sourceColumn": "plazo_acordado_dias",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "condiciones_pago",
+            "dataType": "string",
+            "sourceColumn": "condiciones_pago",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimProveedor",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "dim_proveedor",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ]
+      },
+      {
+        "name": "DimAlmacen",
+        "columns": [
+          {
+            "name": "almacen_key",
+            "dataType": "int64",
+            "sourceColumn": "almacen_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "codigo",
+            "dataType": "string",
+            "sourceColumn": "codigo",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "nombre",
+            "dataType": "string",
+            "sourceColumn": "nombre",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ciudad",
+            "dataType": "string",
+            "sourceColumn": "ciudad",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "activo",
+            "dataType": "boolean",
+            "sourceColumn": "activo",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimAlmacen",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "dim_almacen",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ]
+      },
+      {
+        "name": "FactCompras",
+        "columns": [
+          {
+            "name": "linea_pedido_id",
+            "dataType": "int64",
+            "sourceColumn": "linea_pedido_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "pedido_id",
+            "dataType": "int64",
+            "sourceColumn": "pedido_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "numero_pedido",
+            "dataType": "string",
+            "sourceColumn": "numero_pedido",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "fecha_pedido_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_pedido_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "fecha_entrega_prevista_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_entrega_prevista_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "producto_key",
+            "dataType": "int64",
+            "sourceColumn": "producto_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "proveedor_key",
+            "dataType": "int64",
+            "sourceColumn": "proveedor_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "almacen_key",
+            "dataType": "int64",
+            "sourceColumn": "almacen_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "estado_pedido",
+            "dataType": "string",
+            "sourceColumn": "estado_pedido",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_pedida",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_pedida",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "precio_unitario",
+            "dataType": "decimal",
+            "sourceColumn": "precio_unitario",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "importe",
+            "dataType": "decimal",
+            "sourceColumn": "importe",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_recibida",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_recibida",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_rechazada",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_rechazada",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_pendiente",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_pendiente",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "fecha_ultima_recepcion_pedido_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_ultima_recepcion_pedido_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "pedido_completo",
+            "dataType": "boolean",
+            "sourceColumn": "pedido_completo",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "pedido_a_tiempo",
+            "dataType": "boolean",
+            "sourceColumn": "pedido_a_tiempo",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "dias_retraso",
+            "dataType": "int64",
+            "sourceColumn": "dias_retraso",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "plazo_real_dias",
+            "dataType": "int64",
+            "sourceColumn": "plazo_real_dias",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactCompras",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "fact_compras",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Coste total de compras",
+            "expression": [
+              "CALCULATE (",
+              "    SUM ( FactCompras[importe] ),",
+              "    NOT FactCompras[estado_pedido] IN { \"borrador\", \"cancelado\" }",
+              ")"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Compras",
+            "description": "Importe pedido (cantidad × precio) de pedidos no cancelados ni en borrador."
+          },
+          {
+            "name": "Pedidos",
+            "expression": [
+              "CALCULATE (",
+              "    DISTINCTCOUNT ( FactCompras[pedido_id] ),",
+              "    NOT FactCompras[estado_pedido] IN { \"borrador\", \"cancelado\" }",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Compras",
+            "description": "Número de pedidos distintos (no líneas)."
+          },
+          {
+            "name": "Importe medio por pedido",
+            "expression": [
+              "DIVIDE ( [Coste total de compras], [Pedidos] )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Compras",
+            "description": "Coste total dividido entre pedidos."
+          },
+          {
+            "name": "Precio medio de compra",
+            "expression": [
+              "CALCULATE (",
+              "    DIVIDE ( SUM ( FactCompras[importe] ), SUM ( FactCompras[cantidad_pedida] ) ),",
+              "    NOT FactCompras[estado_pedido] IN { \"borrador\", \"cancelado\" }",
+              ")"
+            ],
+            "formatString": "#,0.0000 €",
+            "displayFolder": "Compras",
+            "description": "Precio medio ponderado por cantidad. Solo tiene sentido filtrado por producto."
+          },
+          {
+            "name": "Desviación sobre coste estándar %",
+            "expression": [
+              "VAR Real = [Coste total de compras]",
+              "VAR AEstandar =",
+              "    CALCULATE (",
+              "        SUMX ( FactCompras, FactCompras[cantidad_pedida] * RELATED ( DimProducto[coste_estandar] ) ),",
+              "        NOT FactCompras[estado_pedido] IN { \"borrador\", \"cancelado\" }",
+              "    )",
+              "RETURN",
+              "    DIVIDE ( Real - AEstandar, AEstandar )"
+            ],
+            "formatString": "0.0 %",
+            "displayFolder": "Compras",
+            "description": "Cuánto se ha pagado por encima (+) o por debajo (−) del coste estándar, ponderado por cantidad comprada."
+          },
+          {
+            "name": "Gasto mes anterior",
+            "expression": [
+              "CALCULATE ( [Coste total de compras], DATEADD ( DimFecha[fecha], -1, MONTH ) )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Evolución",
+            "description": "Coste total de compras del mes anterior al periodo visible."
+          },
+          {
+            "name": "Variación mensual del gasto %",
+            "expression": [
+              "VAR Anterior = [Gasto mes anterior]",
+              "RETURN",
+              "    IF (",
+              "        NOT ISBLANK ( Anterior ) && NOT ISBLANK ( [Coste total de compras] ),",
+              "        DIVIDE ( [Coste total de compras] - Anterior, Anterior )",
+              "    )"
+            ],
+            "formatString": "0.0 %",
+            "displayFolder": "Evolución",
+            "description": "Cambio respecto al mes anterior."
+          },
+          {
+            "name": "Gasto acumulado del año",
+            "expression": [
+              "TOTALYTD ( [Coste total de compras], DimFecha[fecha] )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Evolución",
+            "description": "Acumulado desde el 1 de enero hasta el final del periodo visible."
+          },
+          {
+            "name": "Gasto media móvil 3 meses",
+            "expression": [
+              "VAR Ventana = DATESINPERIOD ( DimFecha[fecha], MAX ( DimFecha[fecha] ), -3, MONTH )",
+              "RETURN",
+              "    IF (",
+              "        NOT ISBLANK ( [Coste total de compras] ),",
+              "        AVERAGEX (",
+              "            CALCULATETABLE ( VALUES ( DimFecha[anio_mes] ), Ventana ),",
+              "            CALCULATE ( [Coste total de compras], ALLEXCEPT ( DimFecha, DimFecha[anio_mes] ) )",
+              "        )",
+              "    )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Evolución",
+            "description": "Media mensual de los tres últimos meses terminados en el periodo visible."
+          },
+          {
+            "name": "Pedidos completados",
+            "expression": [
+              "CALCULATE ( DISTINCTCOUNT ( FactCompras[pedido_id] ), FactCompras[pedido_completo] = TRUE () )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Proveedores",
+            "description": "Pedidos recibidos por completo."
+          },
+          {
+            "name": "Pedidos a tiempo",
+            "expression": [
+              "CALCULATE (",
+              "    DISTINCTCOUNT ( FactCompras[pedido_id] ),",
+              "    FactCompras[pedido_completo] = TRUE (),",
+              "    FactCompras[pedido_a_tiempo] = TRUE ()",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Proveedores",
+            "description": "Pedidos completos cuya última recepción llegó en la fecha prevista o antes."
+          },
+          {
+            "name": "% Entregas puntuales",
+            "expression": [
+              "DIVIDE ( [Pedidos a tiempo], [Pedidos completados] )"
+            ],
+            "formatString": "0.0 %",
+            "displayFolder": "Proveedores",
+            "description": "Pedidos a tiempo sobre pedidos completados."
+          },
+          {
+            "name": "Retraso medio (días)",
+            "expression": [
+              "AVERAGEX (",
+              "    CALCULATETABLE (",
+              "        SUMMARIZE ( FactCompras, FactCompras[pedido_id], FactCompras[dias_retraso] ),",
+              "        FactCompras[pedido_completo] = TRUE ()",
+              "    ),",
+              "    FactCompras[dias_retraso]",
+              ")"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Proveedores",
+            "description": "Media de días de retraso por pedido completado (0 si llegó a tiempo). Se reduce a un pedido por fila antes de promediar."
+          },
+          {
+            "name": "Plazo real medio (días)",
+            "expression": [
+              "AVERAGEX (",
+              "    CALCULATETABLE (",
+              "        SUMMARIZE ( FactCompras, FactCompras[pedido_id], FactCompras[plazo_real_dias] ),",
+              "        FactCompras[pedido_completo] = TRUE ()",
+              "    ),",
+              "    FactCompras[plazo_real_dias]",
+              ")"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Proveedores",
+            "description": "Días entre el pedido y su última recepción, por pedido completado."
+          },
+          {
+            "name": "Desviación de plazo (días)",
+            "expression": [
+              "IF (",
+              "    HASONEVALUE ( DimProveedor[proveedor_key] ) && NOT ISBLANK ( [Plazo real medio (días)] ),",
+              "    [Plazo real medio (días)] - SELECTEDVALUE ( DimProveedor[plazo_acordado_dias] )",
+              ")"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Proveedores",
+            "description": "Plazo real medio menos plazo acordado del proveedor."
+          },
+          {
+            "name": "Cuota de gasto %",
+            "expression": [
+              "DIVIDE ( [Coste total de compras], CALCULATE ( [Coste total de compras], REMOVEFILTERS ( DimProveedor ) ) )"
+            ],
+            "formatString": "0.0 %",
+            "displayFolder": "Proveedores",
+            "description": "Peso del proveedor sobre el gasto total del periodo."
+          },
+          {
+            "name": "Ranking de proveedor por gasto",
+            "expression": [
+              "IF (",
+              "    HASONEVALUE ( DimProveedor[proveedor_key] ) && NOT ISBLANK ( [Coste total de compras] ),",
+              "    -- ALLSELECTED sobre la TABLA: si solo se liberase la clave, el filtro de la columna visible (código o nombre)",
+              "    -- seguiría activo y todos los proveedores quedarían primeros.",
+              "    RANKX ( ALLSELECTED ( DimProveedor ), [Coste total de compras],, DESC, DENSE )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Proveedores",
+            "description": "Posición del proveedor por gasto en el periodo."
+          }
+        ]
+      },
+      {
+        "name": "FactRecepciones",
+        "columns": [
+          {
+            "name": "linea_recepcion_id",
+            "dataType": "int64",
+            "sourceColumn": "linea_recepcion_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "recepcion_id",
+            "dataType": "int64",
+            "sourceColumn": "recepcion_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "albaran",
+            "dataType": "string",
+            "sourceColumn": "albaran",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "pedido_id",
+            "dataType": "int64",
+            "sourceColumn": "pedido_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "linea_pedido_id",
+            "dataType": "int64",
+            "sourceColumn": "linea_pedido_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "fecha_recepcion_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_recepcion_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "producto_key",
+            "dataType": "int64",
+            "sourceColumn": "producto_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "proveedor_key",
+            "dataType": "int64",
+            "sourceColumn": "proveedor_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "almacen_key",
+            "dataType": "int64",
+            "sourceColumn": "almacen_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "cantidad_recibida",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_recibida",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_rechazada",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_rechazada",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "importe_recibido",
+            "dataType": "decimal",
+            "sourceColumn": "importe_recibido",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "dias_desde_pedido",
+            "dataType": "int64",
+            "sourceColumn": "dias_desde_pedido",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "dias_respecto_previsto",
+            "dataType": "int64",
+            "sourceColumn": "dias_respecto_previsto",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactRecepciones",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "fact_recepciones",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "% Rechazo",
+            "expression": [
+              "DIVIDE (",
+              "    SUM ( FactRecepciones[cantidad_rechazada] ),",
+              "    SUM ( FactRecepciones[cantidad_recibida] ) + SUM ( FactRecepciones[cantidad_rechazada] )",
+              ")"
+            ],
+            "formatString": "0.00 %",
+            "displayFolder": "Proveedores",
+            "description": "Unidades rechazadas sobre el total entregado (aceptado + rechazado)."
+          },
+          {
+            "name": "Importe recibido",
+            "expression": [
+              "SUM ( FactRecepciones[importe_recibido] )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Proveedores",
+            "description": "Valor de la mercancía aceptada, a precio de compra."
+          }
+        ]
+      },
+      {
+        "name": "FactMovimientosInventario",
+        "columns": [
+          {
+            "name": "movimiento_id",
+            "dataType": "int64",
+            "sourceColumn": "movimiento_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "fecha_key",
+            "dataType": "int64",
+            "sourceColumn": "fecha_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "producto_key",
+            "dataType": "int64",
+            "sourceColumn": "producto_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "almacen_key",
+            "dataType": "int64",
+            "sourceColumn": "almacen_key",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "tipo_movimiento",
+            "dataType": "string",
+            "sourceColumn": "tipo_movimiento",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "recepcion_id",
+            "dataType": "int64",
+            "sourceColumn": "recepcion_id",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "cantidad",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "coste_unitario",
+            "dataType": "decimal",
+            "sourceColumn": "coste_unitario",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "importe",
+            "dataType": "decimal",
+            "sourceColumn": "importe",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_entrada",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_entrada",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "cantidad_salida",
+            "dataType": "decimal",
+            "sourceColumn": "cantidad_salida",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactMovimientosInventario",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "fact_movimientos_inventario",
+              "schemaName": "gold",
+              "expressionSource": "DatabaseQuery"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Stock",
+            "expression": [
+              "VAR UltimaFecha = MAX ( DimFecha[fecha] )",
+              "RETURN",
+              "    CALCULATE (",
+              "        SUM ( FactMovimientosInventario[cantidad] ),",
+              "        REMOVEFILTERS ( DimFecha ),",
+              "        DimFecha[fecha] <= UltimaFecha",
+              "    )"
+            ],
+            "formatString": "#,0.###",
+            "displayFolder": "Inventario",
+            "description": "Existencias al cierre de la última fecha visible: suma acumulada de todos los movimientos hasta esa fecha."
+          },
+          {
+            "name": "Valor del inventario",
+            "expression": [
+              "SUMX ( DimProducto, [Stock] * DimProducto[coste_estandar] )"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Inventario",
+            "description": "Stock de cada producto valorado a su coste estándar. Semiaditivo: no se suma entre fechas."
+          },
+          {
+            "name": "Productos bajo mínimo",
+            "expression": [
+              "COUNTROWS (",
+              "    FILTER ( DimProducto, DimProducto[activo] = TRUE () && [Stock] < DimProducto[stock_minimo] )",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventario",
+            "description": "Productos activos cuyo stock total está por debajo de su stock mínimo."
+          },
+          {
+            "name": "Entradas (unidades)",
+            "expression": [
+              "SUM ( FactMovimientosInventario[cantidad_entrada] )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventario",
+            "description": "Unidades que han entrado en el periodo."
+          },
+          {
+            "name": "Consumo (unidades)",
+            "expression": [
+              "CALCULATE (",
+              "    SUM ( FactMovimientosInventario[cantidad_salida] ),",
+              "    FactMovimientosInventario[tipo_movimiento] = \"SALIDA_CONSUMO\"",
+              ")"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Consumo",
+            "description": "Unidades salidas por consumo en el periodo."
+          },
+          {
+            "name": "Consumo valorado",
+            "expression": [
+              "CALCULATE (",
+              "    - SUM ( FactMovimientosInventario[importe] ),",
+              "    FactMovimientosInventario[tipo_movimiento] = \"SALIDA_CONSUMO\"",
+              ")"
+            ],
+            "formatString": "#,0.00 €",
+            "displayFolder": "Consumo",
+            "description": "Coste de lo consumido en el periodo. Con la dimensión de producto da el consumo por categoría."
+          },
+          {
+            "name": "Cuota de consumo por categoría %",
+            "expression": [
+              "DIVIDE ( [Consumo valorado], CALCULATE ( [Consumo valorado], REMOVEFILTERS ( DimProducto ) ) )"
+            ],
+            "formatString": "0.0 %",
+            "displayFolder": "Consumo",
+            "description": "Peso de la selección sobre el consumo valorado total."
+          },
+          {
+            "name": "Días del periodo",
+            "expression": [
+              "VAR Primera = CALCULATE ( MIN ( DimFecha[fecha] ), FactMovimientosInventario )",
+              "VAR Ultima = CALCULATE ( MAX ( DimFecha[fecha] ), FactMovimientosInventario )",
+              "RETURN",
+              "    IF ( NOT ISBLANK ( Primera ), DATEDIFF ( Primera, Ultima, DAY ) + 1 )"
+            ],
+            "formatString": "#,0",
+            "displayFolder": "Inventario",
+            "description": "Días entre el primer y el último movimiento del periodo visible."
+          },
+          {
+            "name": "Rotación de inventario",
+            "expression": [
+              "DIVIDE ( DIVIDE ( [Consumo valorado] * 365, [Días del periodo] ), [Valor del inventario] )"
+            ],
+            "formatString": "#,0.0 x",
+            "displayFolder": "Inventario",
+            "description": "Veces al año que se renueva el inventario: consumo valorado anualizado entre el valor del inventario al cierre."
+          },
+          {
+            "name": "Consumo medio diario (90 días)",
+            "expression": [
+              "VAR Ultima = CALCULATE ( MAX ( DimFecha[fecha] ), FactMovimientosInventario )",
+              "RETURN",
+              "    DIVIDE (",
+              "        CALCULATE ( [Consumo (unidades)], DATESINPERIOD ( DimFecha[fecha], Ultima, -90, DAY ) ),",
+              "        90",
+              "    )"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Inventario",
+            "description": "Unidades consumidas al día en los 90 días anteriores al último movimiento visible."
+          },
+          {
+            "name": "Días de cobertura",
+            "expression": [
+              "DIVIDE ( [Stock], [Consumo medio diario (90 días)] )"
+            ],
+            "formatString": "#,0.0",
+            "displayFolder": "Inventario",
+            "description": "Cuántos días dura el stock actual al ritmo de consumo de los últimos 90 días."
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "FactCompras_fecha_pedido_key__DimFecha",
+        "fromTable": "FactCompras",
+        "fromColumn": "fecha_pedido_key",
+        "toTable": "DimFecha",
+        "toColumn": "fecha_key"
+      },
+      {
+        "name": "FactCompras_fecha_entrega_prevista_key__DimFecha",
+        "fromTable": "FactCompras",
+        "fromColumn": "fecha_entrega_prevista_key",
+        "toTable": "DimFecha",
+        "toColumn": "fecha_key",
+        "isActive": false
+      },
+      {
+        "name": "FactCompras_producto_key__DimProducto",
+        "fromTable": "FactCompras",
+        "fromColumn": "producto_key",
+        "toTable": "DimProducto",
+        "toColumn": "producto_key"
+      },
+      {
+        "name": "FactCompras_proveedor_key__DimProveedor",
+        "fromTable": "FactCompras",
+        "fromColumn": "proveedor_key",
+        "toTable": "DimProveedor",
+        "toColumn": "proveedor_key"
+      },
+      {
+        "name": "FactCompras_almacen_key__DimAlmacen",
+        "fromTable": "FactCompras",
+        "fromColumn": "almacen_key",
+        "toTable": "DimAlmacen",
+        "toColumn": "almacen_key"
+      },
+      {
+        "name": "FactRecepciones_fecha_recepcion_key__DimFecha",
+        "fromTable": "FactRecepciones",
+        "fromColumn": "fecha_recepcion_key",
+        "toTable": "DimFecha",
+        "toColumn": "fecha_key"
+      },
+      {
+        "name": "FactRecepciones_producto_key__DimProducto",
+        "fromTable": "FactRecepciones",
+        "fromColumn": "producto_key",
+        "toTable": "DimProducto",
+        "toColumn": "producto_key"
+      },
+      {
+        "name": "FactRecepciones_proveedor_key__DimProveedor",
+        "fromTable": "FactRecepciones",
+        "fromColumn": "proveedor_key",
+        "toTable": "DimProveedor",
+        "toColumn": "proveedor_key"
+      },
+      {
+        "name": "FactRecepciones_almacen_key__DimAlmacen",
+        "fromTable": "FactRecepciones",
+        "fromColumn": "almacen_key",
+        "toTable": "DimAlmacen",
+        "toColumn": "almacen_key"
+      },
+      {
+        "name": "FactMovimientosInventario_fecha_key__DimFecha",
+        "fromTable": "FactMovimientosInventario",
+        "fromColumn": "fecha_key",
+        "toTable": "DimFecha",
+        "toColumn": "fecha_key"
+      },
+      {
+        "name": "FactMovimientosInventario_producto_key__DimProducto",
+        "fromTable": "FactMovimientosInventario",
+        "fromColumn": "producto_key",
+        "toTable": "DimProducto",
+        "toColumn": "producto_key"
+      },
+      {
+        "name": "FactMovimientosInventario_almacen_key__DimAlmacen",
+        "fromTable": "FactMovimientosInventario",
+        "fromColumn": "almacen_key",
+        "toTable": "DimAlmacen",
+        "toColumn": "almacen_key"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "kind": "m",
+        "expression": [
+          "let",
+          "    database = Sql.Database(\"<SQL_ENDPOINT>\", \"<SQL_ENDPOINT_ID>\")",
+          "in",
+          "    database"
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"DatabaseQuery\"]"
+      }
+    ]
+  }
+}

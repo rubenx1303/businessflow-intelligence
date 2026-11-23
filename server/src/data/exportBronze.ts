@@ -82,7 +82,7 @@ export async function exportarBronze(opciones: { completa?: boolean; destino?: s
     }
     if (t.modo === 'incremental') estado[t.nombre] = marca;
     resultados.push({
-      tabla: t.nombre, modo: t.modo, filas: Number(escrito.n),
+      tabla: t.nombre, modo: opciones.completa ? 'completa' : t.modo, filas: Number(escrito.n),
       marca_agua: t.modo === 'incremental' ? { desde, hasta: marca } : null,
       archivo: posix(path.relative(raizLake, archivo)), bytes: fs.statSync(archivo).size,
       sha256: crypto.createHash('sha256').update(fs.readFileSync(archivo)).digest('hex'), ms: Date.now() - t0,

@@ -18,7 +18,7 @@ PostgreSQL se ejecuta en Docker y DuckDB como dependencia npm, así que no ha he
 
 Comprobado en el navegador con la sesión ya iniciada (app.fabric.microsoft.com):
 
-- **Inquilino:** cuenta institucional gestionada por una organización externa (no administrada por el autor).
+- **Inquilino:** inquilino institucional de un centro de formación (cuenta de estudiante).
 - **Licencia:** «Cuenta gratuita».
 - **Prueba de Fabric:** *«Su organización ha deshabilitado las pruebas individuales de Power BI y Fabric»*.
 - **Áreas de trabajo:** solo «Mi área de trabajo», vacía y sin capacidad asignada.
@@ -31,7 +31,7 @@ Comprobado en el navegador con la sesión ya iniciada (app.fabric.microsoft.com)
 
 | Opción | Coste | Notas |
 |---|---|---|
-| A. Pedir al administrador del inquilino institucional que habilite la prueba de Fabric o asigne una capacidad | 0 € | La más simple si acceden; depende de terceros |
+| A. Pedir al administrador del inquilino del centro que habilite la prueba de Fabric o asigne una capacidad | 0 € | La más simple si acceden; depende de terceros |
 | B. Inquilino propio con cuenta profesional nueva + prueba gratuita de Fabric (60 días) | 0 € | Requiere crear una cuenta Microsoft Entra propia; control total, incluidos Entra ID y RLS |
 | C. Capacidad F2 de Azure en pago por uso, pausándola al terminar cada sesión | ~0,3–0,4 €/h encendida (precio orientativo, sin verificar) | Requiere suscripción de Azure y tarjeta; excelente para demostrar control de costes |
 

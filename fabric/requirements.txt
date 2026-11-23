@@ -1,0 +1,6 @@
+azure-identity>=1.17
+azure-storage-file-datalake>=12.16
+deltalake>=0.20
+pyarrow>=16
+tzdata
+mssql-python
