@@ -1,0 +1,21 @@
+# Base operativa local. Solo PostgreSQL: la API y la web se ejecutan con npm para un ciclo de desarrollo rápido.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: bfi-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bfi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-businessflow}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - bfi_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bfi} -d ${POSTGRES_DB:-businessflow}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  bfi_pgdata:

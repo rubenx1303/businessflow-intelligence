@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Paleta: gris almacén frío, tinta petróleo y los tres colores de una etiqueta de estado. */
+:root {
+  --fondo: #ebefed;
+  --panel: #ffffff;
+  --panel2: #f4f7f5;
+  --linea: #d3dbd7;
+  --tinta: #13232a;
+  --tenue: #56686d;
+  --marca: #0e5a6b;
+  --marca-fuerte: #0a4654;
+  --sobre-marca: #ffffff;
+  --marca-suave: #dcecef;
+  --ambar: #a86800;
+  --ambar-suave: #fbefd3;
+  --rojo: #b3362b;
+  --rojo-suave: #f9dfdb;
+  --verde: #2a7347;
+  --verde-suave: #ddefe3;
+  --sombra: 0 1px 2px rgb(19 35 42 / 0.06), 0 8px 24px -12px rgb(19 35 42 / 0.18);
+  color-scheme: light;
+}
+.dark {
+  --fondo: #0c1518;
+  --panel: #131f24;
+  --panel2: #18272d;
+  --linea: #25373e;
+  --tinta: #e3ebe9;
+  --tenue: #8ea2a7;
+  --marca: #58b9cb;
+  --marca-fuerte: #7fcddb;
+  --sobre-marca: #05222a;
+  --marca-suave: #173640;
+  --ambar: #e8b04c;
+  --ambar-suave: #3a2e14;
+  --rojo: #f07f72;
+  --rojo-suave: #40201d;
+  --verde: #6fc493;
+  --verde-suave: #183326;
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 28px -14px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: "Archivo Variable", "Segoe UI", system-ui, sans-serif;
+  --color-fondo: var(--fondo);
+  --color-panel: var(--panel);
+  --color-panel2: var(--panel2);
+  --color-linea: var(--linea);
+  --color-tinta: var(--tinta);
+  --color-tenue: var(--tenue);
+  --color-marca: var(--marca);
+  --color-marca-fuerte: var(--marca-fuerte);
+  --color-sobre-marca: var(--sobre-marca);
+  --color-marca-suave: var(--marca-suave);
+  --color-ambar: var(--ambar);
+  --color-ambar-suave: var(--ambar-suave);
+  --color-rojo: var(--rojo);
+  --color-rojo-suave: var(--rojo-suave);
+  --color-verde: var(--verde);
+  --color-verde-suave: var(--verde-suave);
+  --shadow-panel: var(--sombra);
+}
+
+html { background: var(--fondo); }
+body {
+  font-family: var(--font-sans);
+  color: var(--tinta);
+  background: var(--fondo);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+/* Cifras y títulos usan el eje de anchura de Archivo: más estrecho = más dato por línea. */
+.cifra { font-variant-numeric: tabular-nums; font-stretch: 88%; }
+.titulo { font-stretch: 84%; font-weight: 650; letter-spacing: -0.01em; }
+table { font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 2px solid var(--marca); outline-offset: 2px; border-radius: 4px; }
+::selection { background: var(--marca); color: var(--sobre-marca); }
+
+@keyframes entra-panel { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes entra-modal { from { transform: translateY(8px) scale(0.985); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulso { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+.anim-panel { animation: entra-panel 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.anim-modal { animation: entra-modal 0.18s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.anim-fondo { animation: aparece 0.15s ease-out; }
+.esqueleto { background: var(--linea); border-radius: 4px; animation: pulso 1.3s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+.recharts-cartesian-axis-tick-value { font-size: 11px; fill: var(--tenue); font-variant-numeric: tabular-nums; }
+.recharts-surface:focus, .recharts-wrapper:focus, .recharts-wrapper *:focus { outline: none; }

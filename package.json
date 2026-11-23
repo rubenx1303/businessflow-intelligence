@@ -1,0 +1,18 @@
+{
+  "name": "businessflow-intelligence",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Plataforma de compras, inventario y analítica para pymes con una capa Bronze local en Parquet",
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "db:up": "docker compose up -d --wait db",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run migrate -w server",
+    "db:seed": "npm run seed -w server",
+    "dev:api": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "test": "npm test -w server",
+    "export:bronze": "npm run export:bronze -w server",
+    "build": "npm run build -w server && npm run build -w web"
+  }
+}
